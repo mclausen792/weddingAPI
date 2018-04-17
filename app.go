@@ -77,6 +77,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/guests", AllGuestsEndPoint).Methods("GET")
 	r.HandleFunc("/guests", CreateGuestEndPoint).Methods("POST")
+
 	fmt.Println("running on Port" + port)
 	if err := http.ListenAndServe(":"+port, handlers.CORS()(r)); err != nil {
 		log.Fatal(err)
