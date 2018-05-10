@@ -11,8 +11,8 @@ import (
 	. "weddingAPI/dao"
 	. "weddingAPI/models"
 
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	. "github.com/rs/cors"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -79,7 +79,7 @@ func main() {
 	r.HandleFunc("/guests", CreateGuestEndPoint).Methods("POST")
 
 	fmt.Println("running on Port" + port)
-	if err := http.ListenAndServe(":"+port, handlers.CORS()(r)); err != nil {
+	if err := http.ListenAndServe(":"+port, (r)); err != nil {
 		log.Fatal(err)
 	}
 }
