@@ -12,7 +12,7 @@ import (
 	. "weddingAPI/models"
 
 	"github.com/gorilla/mux"
-	. "github.com/rs/cors"
+	"github.com/rs/cors"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -77,9 +77,14 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/guests", AllGuestsEndPoint).Methods("GET")
 	r.HandleFunc("/guests", CreateGuestEndPoint).Methods("POST")
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte("{\"hello\": \"world\"}"))
+	})
 
 	fmt.Println("running on Port" + port)
-	if err := http.ListenAndServe(":"+port, (r)); err != nil {
+	handler := cors.Default().Handler(r)
+	if err := http.ListenAndServe(":"+port, handler); err != nil {
 		log.Fatal(err)
 	}
 }
