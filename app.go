@@ -85,7 +85,7 @@ func main() {
 	})
 
 	fmt.Println("running on Port" + port)
-	if err := http.ListenAndServe(":"+port, handlers.CORS()(r)); err != nil {
+	if err := http.ListenAndServe(":"+port, handlers.CORS(handlers.AllowedOrigins([]string{"https://ericandmakayla.firebaseapp.com/, http://localhost:3001/"}))(r)); err != nil {
 		log.Fatal(err)
 	}
 }
