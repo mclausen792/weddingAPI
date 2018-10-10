@@ -7,6 +7,7 @@ type Guests struct {
 	First     string        `bson:"first" json:"first"`
 	Last      string        `bson:"last" json:"last"`
 	Attending string        `bson:"attending" json:"attending"`
-	Children  int           `bson:"children" json: "children"`
+	Children  int           `bson:"children" json:"children"`
 	Adults    int           `bson:"adults" json:"adults"`
+	Allergies string        `bson:"allergies" json:"allergies"`
 }
