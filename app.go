@@ -77,7 +77,7 @@ func main() {
 	r := mux.NewRouter()
 	r.StrictSlash(false)
 	r.HandleFunc("/guests", AllGuestsEndPoint).Methods("GET")
-	r.HandleFunc("/guests", CreateGuestEndPoint).Methods("POST")
+	r.HandleFunc("/", CreateGuestEndPoint).Methods("POST")
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("{\"hello\": \"world\"}"))
 	})
