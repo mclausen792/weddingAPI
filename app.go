@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	fmt.Println("deployed")
 	r := mux.NewRouter()
 	r.HandleFunc("/guests", GuestsEndpoint).Methods(http.MethodPost)
 
