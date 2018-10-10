@@ -75,6 +75,7 @@ func main() {
 	}
 
 	r := mux.NewRouter()
+	r.StrictSlash(false)
 	r.HandleFunc("/guests", AllGuestsEndPoint).Methods("GET")
 	r.HandleFunc("/guests", CreateGuestEndPoint).Methods("POST")
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -83,7 +84,7 @@ func main() {
 
 	fmt.Println("running on Port" + port)
 	if err := http.ListenAndServe(":"+port, handlers.CORS(
-		handlers.AllowedOrigins([]string{"https://ericandmakayla.firebaseapp.com/", "http://localhost:3001/"}),
+		handlers.AllowedOrigins([]string{"https://ericandmakayla.firebaseapp.com", "http://localhost:3001/"}),
 		handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "OPTIONS"}),
 		handlers.AllowedHeaders([]string{"x-requested-with"}),
 	)(r)); err != nil {
