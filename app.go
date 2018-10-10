@@ -78,9 +78,6 @@ func main() {
 	r.HandleFunc("/guests", AllGuestsEndPoint).Methods("GET")
 	r.HandleFunc("/guests", CreateGuestEndPoint).Methods("POST")
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Origin", "https://ericandmakayla.firebaseapp.com/, http://localhost:3001/")
 		w.Write([]byte("{\"hello\": \"world\"}"))
 	})
 
@@ -88,7 +85,7 @@ func main() {
 	if err := http.ListenAndServe(":"+port, handlers.CORS(
 		handlers.AllowedOrigins([]string{"https://ericandmakayla.firebaseapp.com/", "http://localhost:3001/"}),
 		handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "OPTIONS"}),
-		handlers.AllowedHeaders([]string{"X-requested-with"}),
+		handlers.AllowedHeaders([]string{"x-requested-with"}),
 	)(r)); err != nil {
 		log.Fatal(err)
 	}
