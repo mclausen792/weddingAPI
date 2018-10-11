@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -17,23 +19,6 @@ import (
 
 var config = Config{}
 var dao = GuestsDAO{}
-
-func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "3001"
-	}
-
-	r := mux.NewRouter()
-	r.StrictSlash(false)
-	r.HandleFunc("/guests", AllGuestsEndPoint).Methods("GET")
-	r.HandleFunc("/guests", CreateGuestEndPoint).Methods(http.MethodPost)
-	// r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	w.Write([]byte("{\"hello\": \"world\"}"))
-	// })
-
-	http.ListenAndServe(":"+port, handlers.CORS()(r))
-}
 
 func AllGuestsEndPoint(w http.ResponseWriter, r *http.Request) {
 	guests, err := dao.FindAllGuests()
@@ -66,7 +51,6 @@ func respondWithError(w http.ResponseWriter, code int, msg string) {
 func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	response, _ := json.Marshal(payload)
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(code)
 	w.Write(response)
 }
@@ -82,4 +66,28 @@ func init() {
 	dao.Server = config.Server
 	dao.Database = config.Database
 	dao.Connect()
+}
+
+func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3001"
+	}
+
+	r := mux.NewRouter()
+	r.StrictSlash(false)
+	r.HandleFunc("/guests", AllGuestsEndPoint).Methods("GET")
+	r.HandleFunc("/", CreateGuestEndPoint).Methods("POST")
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("{\"hello\": \"world\"}"))
+	})
+
+	fmt.Println("running on Port" + port)
+	if err := http.ListenAndServe(":"+port, handlers.CORS(
+		handlers.AllowedOrigins([]string{"https://ericandmakayla.firebaseapp.com", "http://localhost:3001/"}),
+		handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "OPTIONS"}),
+		handlers.AllowedHeaders([]string{"x-requested-with"}),
+	)(r)); err != nil {
+		log.Fatal(err)
+	}
 }
