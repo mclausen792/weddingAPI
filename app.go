@@ -2,8 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
-	"log"
 	"net/http"
 	"os"
 
@@ -30,18 +28,11 @@ func main() {
 	r.StrictSlash(false)
 	r.HandleFunc("/guests", AllGuestsEndPoint).Methods("GET")
 	r.HandleFunc("/guests", CreateGuestEndPoint).Methods(http.MethodPost)
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("{\"hello\": \"world\"}"))
-	})
+	// r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	w.Write([]byte("{\"hello\": \"world\"}"))
+	// })
 
-	fmt.Println("running on Port" + port)
-	if err := http.ListenAndServe(":"+port, handlers.CORS(
-		handlers.AllowedOrigins([]string{"https://ericandmakayla.firebaseapp.com", "http://localhost:3000"}),
-		handlers.AllowedMethods([]string{"*"}),
-		handlers.AllowedHeaders([]string{"x-requested-with"}),
-	)(r)); err != nil {
-		log.Fatal(err)
-	}
+	http.ListenAndServe(":"+port, handlers.CORS()(r))
 }
 
 func AllGuestsEndPoint(w http.ResponseWriter, r *http.Request) {
